@@ -4,7 +4,7 @@
 
 * Developer Name: Amruta Pawar
 * Krista API Version: 1.0.118
-* Global Catalog Version: GC-2025.11.3
+* Global Catalog Version: GC-2025.02.02
 
 ### Enhancements
 

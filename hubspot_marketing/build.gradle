@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'jacoco'
+    id 'org.sonarqube' version '3.5.0.2730'
 }
 
 jar.archiveBaseName = "hubspot_marketing"
@@ -87,10 +89,6 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.8.1'
-}
-
-test {
-    useJUnitPlatform()
 }
 
 task createSourceDir(type: Exec) {
@@ -265,6 +263,31 @@ jar {
     duplicatesStrategy = "exclude"
 }
 
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+sonar {
+    properties {
+        property('sonar.projectName', 'SonarScanner for Krista Global Catalog (hubspot_marketing with Jacoco code coverage)')
+        property("sonar.projectKey", "sonar-scanner-hubspot_marketing")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    }
+}
+
+tasks.named("sonar") {
+    dependsOn(tasks.jacocoTestReport)
 }
